@@ -1,62 +1,42 @@
-if (!String.prototype.format) {
-    String.prototype.format = function() {
-        var args = arguments;
-        return this.replace(/{(\d+)}/g, function(match, number) { 
-            return typeof args[number] != 'undefined'
-                ? args[number]
-                : match
-            ;
-        });
-    };
-}
-
-
 class ContactFormApi {
     constructor() {
         this.webUrl = _spPageContextInfo.webAbsoluteUrl;
         this.siteUrl = _spPageContextInfo.siteAbsoluteUrl;
         this.listName = "ContactForm";
-        console.log(this.params);
+        console.log("webUrl: " + this.webUrl);
+        console.log("siteUrl: " + this.siteUrl);
+        console.log("listName: " + this.listName);
     }
 
     getAllContacts() {
-        const endpoint = String.format("{0}/_api/web/lists/getbytitle('{1}')/items",this.webUrl, this.listName);
-        const contacts = $.ajax({
-                            url: endpoint,
-                            type: "GET",
-                            headers: {
-                                "Accept" : "application/json;odata=verbose"
-                            }
-                        });
-        contacts.done(function(data){
-            return data.d.results;
-        });
-        contacts.fail(function(error){
-            console.log(error);
+        const endpoint = `${this.webUrl}/_api/web/lists/getbytitle('${this.listName}')/items`;
+        console.log("Endpoint: " + endpoint);
+        console.log("making ajax call");
+        return $.ajax({
+            url : endpoint,
+            type: "GET",
+            headers : {
+                "accept" : "application/json;odata=nometadata"
+            }
         })
     }
 
     getContactById(id) {
-        const endpoint = String.format("{0}/_api/web/lists/getbytitle('{1}')/items({2})", this.webUrl, this.listName, id);
-        const contact = $.ajax({
-                            url: endpoint,
-                            type: "GET",
-                            headers: {
-                                "Accept" : "application/json;odata=verbose"
-                            }
-                        });
-        contact.done(function(data){
-            return data.d;
-        });
-        contact.fail(function(error){
-            console.log("getContactById_Error:  " + JSON.stringify(error));
-            console.log(error);
+        const endpoint = `${this.webUrl}/_api/web/lists/getbytitle('${this.listName}')/items(${id})`;
+        console.log("getContactById");
+        console.log(endpoint);
+        return $.ajax({
+            url : endpoint,
+            type: "GET",
+            headers : {
+                "accept" : "application/json;odata=nometadata"
+            }
         })
     }
 
     deleteContact(id) {
-        const endpoint = String.format("{0}/_api/web/lists/getbytitle('{1}')/items({2})", this.webUrl, this.listName, id);
-        const ret = $.ajax({
+        const endpoint = `${this.webUrl}/_api/web/lists/getbytitle('${this.listName}')/items(${id})`;
+        return $.ajax({
             url: endpoint,
             type: "POST",
             headers: {
@@ -65,62 +45,40 @@ class ContactFormApi {
                 "X-HTTP-Method" : "DELETE"
             }
         });
-        ret.done(function(){
-            return true;
-        });
-        ret.fail(function(error){
-            console.log("deleteContact_Error:  " + JSON.stringify(error));
-            return "Error: " + JSON.stringify(error);
-        })
 
     }
 
     updateContact(id,contact){
-        const endpoint = String.format("{0}/_api/web/lists/getbytitle('{1}')/items({2})",this.webUrl, this.listName, id);
-        const data = $.ajax({
+        const endpoint = `${this.webUrl}/_api/web/lists/getbytitle('${this.listName}')/items(${id})`;
+        return $.ajax({
             url: endpoint,
             type: "POST",
             headers: {
-                "accept": "application/json; odata=verbose",
+                "accept": "application/json",
+                "content-type":"application/json;odata=nometadata",
                 "X-RequestDigest": $("#__REQUESTDIGEST").val(),
                 "IF-MATCH": "*",
                 "X-Http-Method": "PATCH"
             },
-            data: JSON.stringify(data)
+            data: JSON.stringify(contact)
         })
-        data.done(function(results){
-            return results;
-        });
-        
     }
 
     newContact(contact) {
-        const endpoint = String.format("{0}/_api/web/lists/getbytitle('{1}')/items", this.webUrl, this.listName);
-        const type = this.GetItemTypeForListName(this.listName);
+        const endpoint = `${this.webUrl}/_api/web/lists/getbytitle('${this.listName}')/items`;
         console.log("newContact_endpoint: " + endpoint);
-        const data = $.extend({},{
-            __metadata: {'type': type}
-        }, contact);
-        console.log("Data object after merge");
-        console.log(JSON.stringify(data));
-        const ret = $.ajax({
-                        url: endpoint,
-                        type: "POST",
-                        headers: {
-                            "accept": "application/json;odata=verbose",
-                            "Content-Type" : "application/json;odata=verbose",
-                            "X-RequestDigest": $("#__REQUESTDIGEST").val()
-                        },
-                        data: JSON.stringify(data)
-                    });
-        ret.done(function(data){
-            console.log("New Item Results: " + JSON.stringify(data));
-            return data;
+        console.log("newContact Data");
+        console.log(contact);
+        return $.ajax({
+            url: endpoint,
+            type: "POST",
+            headers: {
+                "accept": "application/json",
+                "content-type":"application/json;odata=nometadata",
+                "X-RequestDigest": $("#__REQUESTDIGEST").val()
+            },
+            data: JSON.stringify(contact)
         });
-        ret.fail(function(error){
-            console.log("New Contact Error: " + JSON.stringify(error));
-            return error;
-        })
     }
 
     GetItemTypeForListName(name) {

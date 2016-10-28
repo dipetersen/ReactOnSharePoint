@@ -37,20 +37,27 @@ class ContactFormApi {
     }
 
     getAllContacts() {
-        return this._clone(contacts);
+        const deferred = $.Deferred();
+        promise.resolve(this._clone(contacts))
+        return deferred.promise();
     }
 
     getContactById(id) {
+        const deferred = $.Deferred();
         const idNumber = parseInt(id);
         const contact = contacts.find(contact => contact.id === idNumber);
         console.log(contact);
-        return this._clone(contact);
+        deferred.resolve(this._clone(contact));
+        return deferred.promise();
     }
 
     deleteContact(id) {
+        const deferred = $.Deferred();
         const idx = contacts.findIndex(contact => contact.id === id);
         console.log(idx);
-        contacts = [...contacts.slice(0,idx), ...contacts.slice(idx+1)]; 
+        contacts = [...contacts.slice(0,idx), ...contacts.slice(idx+1)];
+        deferred.resolve(contacts); 
+        return deferred.promise();
     }
 
     updateContact(contact){

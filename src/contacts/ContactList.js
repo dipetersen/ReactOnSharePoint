@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 
 class ContactList extends Component {
+
     render() {
         const createContactRow = function(contact) {
             return (
 
-                    <tr key={contact.id}>
+                    <tr key={contact.ID}>
                         <td>
-                            <Link to={`contact/${contact.id}`}>{contact.id}</Link>
+                            <Link to={`contact/${contact.ID}`}>{contact.ID}</Link>
                         </td>
                         <td>{contact.firstName}</td>
                         <td>{contact.Title}</td>

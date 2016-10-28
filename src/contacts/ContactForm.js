@@ -12,56 +12,61 @@ const STATES = [
 
 
 class ContactForm extends Component {
-    constructor(props, context) {
-        super(props, context);
-        console.log('ContactForm Constructor')
-    }
-
-    renderTextInput(id, label, value) {
-        return this.renderField(id,label,
-            <input type="text" onChange={this.props.onChange} className="form-control" id={id} ref={id} defaultValue={value}/>
-        )
-    }
-
-    renderTextArea(id, label, value) {
-        return this.renderField(id, label,
-            <textarea className="form-control" onChange={this.props.onChange} id={id} ref={id} defaultValue={value}/>
-        )
-    }
-
-    renderSelect(id, label, values, value) {
-        var options = values.map(function(v){
-            const s = v.split('|');
-            const a = s[0];
-            const f = (s[1] !== undefined ? s[1] : s[0]);
-            return <option key={a} value={a}>{f}</option>
-        })
-        return this.renderField(id,label,
-            <select className="form-control" id={id} ref={id} defaultValue={value} onChange={this.props.onChange}>
-                {options}
-            </select>
-        )
-    }
-
-    renderField(id, label,field){
-        return <div className='form-group'>
-                    <label htmlFor={id} className="col-sm-4 control-label">{label}</label>
-                    <div className="col-sm-6">
-                        {field}
-                    </div>
-               </div>
-    }
 
     render() {
         return (
             <div className="form-horizontal">
-                {this.renderTextInput('firstName', 'First Name', this.props.contact.firstName)}
-                {this.renderTextInput('Title', 'Last Name', this.props.contact.Title)}
-                {this.renderTextInput('phoneNumber', 'Phone Number', this.props.contact.phoneNumber)}
-                {this.renderTextArea('address','Address', this.props.contact.address)}
-                {this.renderTextInput('city','City', this.props.contact.city)}
-                {this.renderSelect('state',"State",STATES, this.props.contact.state)}
-                {this.renderTextInput('zipCode','Zip Code', this.props.contact.zipCode)}
+                <div className='form-group'>
+                    <label htmlFor='firstName' className='col-sm-4 control-label'>First Name</label>
+                    <div className="col-sm-6">
+                        <input type="text" onChange={this.props.onChange} className="form-control" id="firstName" value={this.props.contact.firstName} />
+                    </div>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='Title' className='col-sm-4 control-label'>Last Name</label>
+                    <div className="col-sm-6">
+                        <input type="text" onChange={this.props.onChange} className="form-control" id="Title" value={this.props.contact.Title} />
+                    </div>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='phoneNumber' className='col-sm-4 control-label'>Phone Number</label>
+                    <div className="col-sm-6">
+                        <input type="text" onChange={this.props.onChange} className="form-control" id="phoneNumber" value={this.props.contact.phoneNumber} />
+                    </div>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='address' className='col-sm-4 control-label'>Address</label>
+                    <div className="col-sm-6">
+                        <textarea className="form-control" onChange={this.props.onChange} id="address" value={this.props.contact.address} />
+                    </div>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='city' className='col-sm-4 control-label'>City</label>
+                    <div className="col-sm-6">
+                        <input type="text" onChange={this.props.onChange} className="form-control" id="city" value={this.props.contact.city} />
+                    </div>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='state' className='col-sm-4 control-label'>State</label>
+                    <div className="col-sm-6">
+                        <select className="form-control" id="state" value={this.props.contact.state} onChange={this.props.onChange} >
+                            {
+                                STATES.map(function(v){
+                                    const s = v.split('|');
+                                    const a = s[0];
+                                    const f = (s[1] !== undefined ? s[1] : s[0]);
+                                    return <option key={a} value={a}>{f}</option>
+                                })
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='zipCode' className='col-sm-4 control-label'>Zip Code</label>
+                    <div className="col-sm-6">
+                        <input type="text" onChange={this.props.onChange} className="form-control" id="zipCode" value={this.props.contact.zipCode} />
+                    </div>
+                </div>
                 <div className="form-group">
                     <div className="col-sm-4"></div>
                     <div className="col-sm-6">
