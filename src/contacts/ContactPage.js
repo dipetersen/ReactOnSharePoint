@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import ContactFormApi from '../api/ContactFormApi';
+import ContactFormApi from '../api/ContactApi';
 import ContactList from './ContactList';
 import toastr from 'toastr';
 
