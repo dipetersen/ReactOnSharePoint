@@ -46,7 +46,7 @@ class ContactFormApi {
 
     getContactById(id) {
         const deferred = $.Deferred();
-        const idNumber = parseInt(id);
+        const idNumber = parseInt(id,10);
         const contact = contacts.value.find(contact => contact.ID === idNumber);
         console.log("Contact::");
         console.log(contact);
